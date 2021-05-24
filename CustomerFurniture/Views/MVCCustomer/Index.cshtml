@@ -1,0 +1,157 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<head>
+    <style type="text/css">
+        .table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+        }
+            .table th {
+                background-color: #F7F7F7;
+                color: #333;
+                font-weight: bold;
+            }
+
+            .table th, .table td {
+                padding: 5px;
+                border: 1px solid #ccc;
+            }
+    </Style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+        //Display delivery Order Details
+        $(document).ready(() => {
+            $("#Btn3").click(function () {
+                $.get("https://localhost:44370/api/Furniture",
+                    function (data, textStatus, jqXHR) {
+                        var html = '';
+                        for (let i = 0; i < data.length; i++) {
+                            html += `<tr>`;
+                            html += `<td>${data[i].FurnitureId}</td>`;
+                            html += `<td>${data[i].Title}</td>`;
+                            html += `<td>${data[i].Price}</td>`;
+                            html += `<td>
+                                <a class="Edit" href="javascript:;">Edit</a>
+                                <a class="Update" href="javascript:;">Update</a>
+                                <a class="Delete" href="javascript:;">Delete</a>
+                                </td>`;
+                            html += `<tr>`;
+                        }
+                        $('#2myRows').html(html);
+                    })
+            })
+        });
+        //Add Customer Details
+        $(document).ready(() => {
+            $("#btnAdd").click(function () {
+                var fieldData = {
+                    "customerId":$("customerId").val(),
+                    "name": $("#name").val(),
+                    "PhoneNumber": $("#PhoneNumber").val(),
+                    "Address": $("#address").val()
+                };
+                console.log(fieldData);
+                $.ajax({
+                    type: 'post',
+                    url: "https://localhost:44370/api/Customer",
+                    data: JSON.stringify(fieldData),
+                    contentType: "application/json",
+                    success: function (data) {
+                        alert("posted : " + data);
+                        window.location.reload();
+                    }
+                })
+            })
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <div>
+            <table class="tableAdd" id="tblCustomers">
+                <thead>
+                    <tr><td>Id</td><td>:</td><td><input type="number" name="customerId" id="customerId"></td></tr>
+                    <tr><td>Name</td><td>:</td><td><input type="text" name="name" id="name"></td></tr>
+                    <tr><td>PhoneNumber</td><td>:</td><td><input type="number" name="PhoneNumber" id="PhoneNumber"></td></tr>
+                    <tr><td>Address</td><td>:</td><td><input type="text" name="address" id="address"></td></tr>
+                    </thead>
+            </table>
+            <br>
+            <input class=" btn" id="btnGet" type="button" value="Customer Details">
+            <input class="btn" id="btnAdd" type="button" value="Add Customer">
+            <br>
+            <p>
+                <table id="tblCustomers" class="table" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th style="width:100px">Customer Id</th>
+                        <th style="width:150px">Name</th>
+                        <th style="width:150px">Phonenumber</th>
+                        <th style="width:150px">Address</th>
+                        <th style="width:150px">Furnitures</th>
+                    </tr>
+                    @foreach (CustomerFurnitureApplication.Models.CustomerModel customer in Model)
+                    {
+                        <tr>
+                            <td class="CustomerId">
+                                <span>@customer.CustomerId</span>
+                                <input type="text" value="@customer.CustomerId" style="display:none" />
+                            </td>
+                            <td class="Name">
+                                <span>@customer.Name</span>
+                                <input type="text" value="@customer.Name" style="display:none" />
+                            </td>
+                            <td class="PhoneNumber">
+                                <span>@customer.PhoneNumber</span>
+                                <input type="text" value="@customer.PhoneNumber" style="display:none" />
+                            </td>
+                            <td class="Address">
+                                <span>@customer.Address</span>
+                                <input type="text" value="@customer.Address" style="display:none" />
+                            </td>
+                            <td>
+                                @foreach (var v in customer.LFurnitures)
+                                {
+                                    <p>@v</p>
+                                }
+                            </td>
+                                <td>
+                                    <a class="Edit" href="javascript:;">Edit</a>
+                                    <a class="Update" href="javascript:;">Update</a>
+                                    <a class="Delete" href="javascript:;">Delete</a>
+                                </td>
+                         </tr>
+                     }
+                 </table>
+            </p>
+        </div>
+    </div>
+    <div>
+        <div>
+            <table class="tableAdd">
+                <thead>
+                    <tr><td>FurnitureId</td><td>:</td><td><input type="number" name="FurnitureId" id="FurnitureId"></td></tr>
+                    <tr><td>Title</td><td>:</td><td><input type="text" name="title" id="title"></td></tr>
+                    <tr><td>Price</td><td>:</td><td><input type="number" name="price" id="price"></td></tr>
+            </table>
+            <br>
+            <input class=" btn" id="Btn3" type="button" value="Furniture Details">
+            <br>
+            <p>
+                <table class="table" id="tablefur">
+                    <thead>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Title</th>
+                    </thead>
+                    <tbody id="myRows2">
+                    </tbody>
+                </table>
+            </p>
+        </div>
+    </div>
+</body>
