@@ -16,14 +16,6 @@ namespace CustomerFurnitureApplication.Repository
             context.SaveChanges();
             
         }
-
-
-        /*
-         * 1.Create a list of customers
-         * 2Iterate the list of customers and get the customer id and equate it with the customer id in the customerfurniture table
-         * 3.Per one customer create a list of furnitures that are assigned to that particular customer
-         * 4.
-         */
         public List<CustomerModel> GetAllCustomers()
         {
             var customers = context.Customers.ToList();
